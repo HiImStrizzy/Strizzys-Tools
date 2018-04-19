@@ -1,0 +1,46 @@
+@echo off
+
+If Exist dllocation.txt Goto :Download 
+
+:Start
+Title First Startup
+Type Strizzydl.txt 
+Echo Please select a download location or type your own:
+Echo 1. C:\Downloads 
+Echo 2. C:\Music
+Echo 3. Custom location
+
+SET /P /I Userinput=Selection:
+
+IF /I '%USERINPUT%'=='1' GOTO :Downloads
+IF /I '%USERINPUT%'=='2' GOTO :Music
+IF /I '%USERINPUT%'=='3' GOTO :Custom
+
+:Downloads 
+echo.>"%CD%\dllocation.txt"
+echo %USERPROFILE%\Downloads > dllocation.txt
+goto :Download
+
+:Music 
+echo.>"%CD%\dllocation.txt"
+echo %USERPROFILE%\Music > dllocation.txt
+goto :Download
+
+:Custom
+echo.>"%CD%\dllocation.txt"
+
+SET /P CDLocation=Type or Drag a file location in the window: 
+echo C:\%CDLocation% > dllocation.txt
+goto :Download
+
+
+:Download 
+Title $trizzy's Downloader
+type Strizzydl.txt 
+set /p DownloadLocation=<dllocation.txt
+set /p Link="Input URl: "
+call youtube-dl.exe -x -c --audio-format mp3 %Link% 
+move *.mp3 C:\%Dllocation%
+move *.PART C:\%Dllocation%
+CLS
+GOTO Download:
